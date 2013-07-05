@@ -29,14 +29,19 @@
 
 #include "../client.h"
 
-void lnclient_send_request_leave_channel (lnclient ctx, lw_i16 channel_id)
+int lnserver_proc_request_leave_channel (lnserver ctx,
+                                         lnserver_client client,
+                                         lnet_buffer buffer)
 {
 
+
+   return LNET_E_OK;
 }
 
-int lnclient_proc_response_leave_channel (lnclient ctx,
-                                         lw_bool success,
-                                         lnet_buffer buffer)
+int lnserver_send_response_leave_channel (lnserver ctx,
+                                          lnserver_client client,
+                                          lw_bool success,
+                                          lw_i16 channel_id)
 {
    return 0;
 }

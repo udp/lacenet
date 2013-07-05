@@ -29,19 +29,45 @@
 
 #include "../server.h"
 
-int lnclient_proc_request_connect (lnserver ctx,
+int lnserver_proc_request_connect (lnserver ctx,
                                    lnserver_client client,
-                                   lw_bool success,
                                    lnet_buffer buffer)
 {
 
    return LNET_E_OK;
 }
 
-void lnclient_send_response_connect (lnserver ctx,
-                                     lnserver_client client)
+void lnserver_send_success_connect (lnserver ctx,
+                                    lnserver_client client,
+                                    lw_i16 peer_id,
+                                    const char * welcome_message)
 {
-}
-                                  
+   lw_i8 request_type = LNET_REQUEST_CONNECT;
+   lw_i8 success = 1;
 
+   lnet_message_send (client->socket,
+                      LNET_MESSAGE_SC_RESPONSE,
+                      0, /* variant */
+                      4,
+                      &request_type, sizeof (request_type),
+                      &success, sizeof (success),
+                      &peer_id, sizeof (peer_id),
+                      welcome_message, strlen (welcome_message));
+}
+
+void lnserver_send_failure_connect (lnserver ctx,
+                                    lnserver_client client,
+                                    const char * deny_reason)
+{
+   lw_i8 request_type = LNET_REQUEST_CONNECT;
+   lw_i8 success = 0;
+
+   lnet_message_send (client->socket,
+                      LNET_MESSAGE_SC_RESPONSE,
+                      0, /* variant */
+                      3,
+                      &request_type, sizeof (request_type),
+                      &success, sizeof (success),
+                      deny_reason, strlen (deny_reason));
+}
 

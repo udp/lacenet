@@ -29,23 +29,22 @@
 
 #include "../client.h"
 
-int lnclient_proc_request_join_channel (lnserver ctx,
+int lnserver_proc_request_join_channel (lnserver ctx,
                                         lnserver_client client,
-                                        lw_bool success,
                                         lnet_buffer buffer)
 {
-   if (!*client->name)
-   {
-      lnserver_send_failure_join_channel
-         (ctx, client, "Name must be set before joining a channel");
-
-      return LNET_E_OK;
-   }
-
    char * channel_name = lnet_buffer_sstring (buffer, lw_true);
 
    if (!channel_name)
       return LNET_E_MEM;
+
+   if (!*client->name)
+   {
+      lnserver_send_failure_join_channel
+         (ctx, client, channel_name, "Name must be set before joining a channel");
+
+      return LNET_E_OK;
+   }
 
    lw_i8 create_flags = lnet_buffer_int8 (buffer);
 
@@ -78,7 +77,11 @@ int lnclient_proc_request_join_channel (lnserver ctx,
 
       list_push (channel->members, client);
 
-      lnserver_send_success_join_channel (ctx, client, channel->name);
+      lnserver_send_success_join_channel (ctx,
+                                          client,
+                                          create_flags,
+                                          channel->id,
+                                          channel->name);
 
       return LNET_E_OK;
    }
@@ -97,13 +100,18 @@ int lnclient_proc_request_join_channel (lnserver ctx,
                     channel->name, strlen (channel->name),
                     channel);
 
-   lnserver_send_success_join_channel (ctx, client, channel->name);
+   lnserver_send_success_join_channel (ctx,
+                                       client,
+                                       create_flags,
+                                       channel->id,
+                                       channel->name);
 
    return LNET_E_OK;
 }
 
 void lnserver_send_success_join_channel (lnserver ctx,
                                          lnserver_client client,
+                                         lw_i8 join_flags,
                                          lw_i16 channel_id,
                                          const char * channel_name)
 {
@@ -118,12 +126,13 @@ void lnserver_send_success_join_channel (lnserver ctx,
                       4,
                       &request_type, sizeof (request_type),
                       &success, sizeof (success),
+                      &join_flags, sizeof (join_flags),
                       &channel_id, sizeof (channel_id),
-                      name, strlen (name));
+                      channel_name, strlen (channel_name));
 }
 
 void lnserver_send_failure_join_channel (lnserver ctx,
-                                         lnclient client,
+                                         lnserver_client client,
                                          const char * channel_name,
                                          const char * deny_reason)
 {

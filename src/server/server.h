@@ -49,6 +49,8 @@ struct _lnserver
    lw_server server;
 
    lw_udp udp;
+
+   lnserver_channel channels;
 };
 
 #include "client.h"
@@ -86,52 +88,79 @@ int lnserver_proc_pong
 
 /* Request: Connect */
 
-int lnserver_proc_request_connect (lnserver, lnet_buffer);
-void lnserver_send_success_connect (lnserver, const char * welcome_message);
-void lnserver_send_failure_connect (lnserver, const char * deny_reason);
+int lnserver_proc_request_connect (lnserver,
+                                   lnserver_client,
+                                   lnet_buffer);
+
+void lnserver_send_success_connect (lnserver,
+                                    lnserver_client,
+                                    lw_i16 peer_id,
+                                    const char * welcome_message);
+
+void lnserver_send_failure_connect (lnserver,
+                                    lnserver_client,
+                                    const char * deny_reason);
 
 
 /* Request: SetName */
 
-int lnserver_proc_request_set_name (lnserver, lnet_buffer);
+int lnserver_proc_request_set_name (lnserver,
+                                    lnserver_client,
+                                    lnet_buffer);
 
-void lnserver_send_success_set_name (lnserver, const char * name);
+void lnserver_send_success_set_name (lnserver,
+                                     lnserver_client,
+                                     const char * name);
 
 void lnserver_send_failure_set_name (lnserver,
+                                     lnserver_client,
                                      const char * name,
                                      const char * deny_reason);
 
 
 /* Request: JoinChannel */
 
-int lnserver_proc_request_join_channel (lnserver, lnet_buffer);
+int lnserver_proc_request_join_channel (lnserver,
+                                        lnserver_client,
+                                        lnet_buffer);
 
 void lnserver_send_success_join_channel (lnserver,
-                                         const char * channel_name,
+                                         lnserver_client,
                                          lw_i8 join_flags,
-                                         lw_i16 channel_id);
+                                         lw_i16 channel_id,
+                                         const char * channel_name);
 
-void lnserver_send_failure_join_channel (lnserver, const char * deny_reason);
+void lnserver_send_failure_join_channel (lnserver,
+                                         lnserver_client,
+                                         const char * channel_name,
+                                         const char * deny_reason);
 
 
 /* Request: LeaveChannel */
    
-int lnserver_proc_request_leave_channel (lnserver, lnet_buffer);
+int lnserver_proc_request_leave_channel (lnserver,
+                                         lnserver_client,
+                                         lnet_buffer);
 
-void lnserver_send_success_leave_channel (lnserver, lw_i16 channel_id);
+void lnserver_send_success_leave_channel (lnserver,
+                                          lnserver_client,
+                                          lw_i16 channel_id);
 
 void lnserver_send_failure_leave_channel (lnserver,
+                                          lnserver_client,
                                           lw_i16 channel_id,
                                           const char * deny_reason);
 
 
 /* Request: ChannelList */
 
-int lnserver_proc_request_channel_list (lnserver, lnet_buffer);
+int lnserver_proc_request_channel_list (lnserver,
+                                        lnserver_client,
+                                        lnet_buffer);
 
-void lnserver_send_success_channel_list (lnserver);
+void lnserver_send_success_channel_list (lnserver, lnserver_client);
 
-void lnserver_send_failure_channel_list (lnserver);
+void lnserver_send_failure_channel_list (lnserver, lnserver_client);
 
 #endif
 

@@ -61,6 +61,11 @@ lnserver_client lnserver_client_new (lnserver ctx, lw_server_client socket)
    return client;
 }
 
+void lnserver_client_delete (lnserver_client client)
+{
+   lw_stream_delete ((lw_stream) client);
+}
+
 static size_t client_sink_data (lw_stream stream,
                                 const char * buf,
                                 size_t length)

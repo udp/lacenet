@@ -27,11 +27,10 @@
  * SUCH DAMAGE.
  */
 
-#include "../client.h"
+#include "../server.h"
 
-int lnclient_proc_request_set_name (lnserver ctx,
-                                    lnclient client,
-                                    lw_bool success,
+int lnserver_proc_request_set_name (lnserver ctx,
+                                    lnserver_client client,
                                     lnet_buffer buffer)
 {
    char * name = lnet_buffer_sstring (buffer, lw_true);
@@ -41,7 +40,7 @@ int lnclient_proc_request_set_name (lnserver ctx,
 
    if (!*name)
    {
-      lnserver_send_failure_set_name (ctx, client, "Invalid name");
+      lnserver_send_failure_set_name (ctx, client, name, "Invalid name");
       return LNET_E_OK;
    }
 
@@ -51,7 +50,7 @@ int lnclient_proc_request_set_name (lnserver ctx,
       {
          if (!strcasecmp (channel_member->name, name))
          {
-            lnserver_send_failure_set_name (ctx, client, "Name already taken");
+            lnserver_send_failure_set_name (ctx, client, name, "Name already taken");
             return LNET_E_OK;
          }
       }
@@ -63,7 +62,7 @@ int lnclient_proc_request_set_name (lnserver ctx,
 }
 
 void lnserver_send_success_set_name (lnserver ctx,
-                                     lnclient client,
+                                     lnserver_client client,
                                      const char * name)
 {
    lw_i8 request_type = LNET_REQUEST_SET_NAME;
@@ -79,18 +78,22 @@ void lnserver_send_success_set_name (lnserver ctx,
 }
 
 void lnserver_send_failure_set_name (lnserver ctx,
-                                     lnclient client,
+                                     lnserver_client client,
+                                     const char * name,
                                      const char * deny_reason)
 {
    lw_i8 request_type = LNET_REQUEST_SET_NAME;
    lw_i8 success = 0;
+   lw_i16 name_len = lnet_htons (strlen (name));
 
    lnet_message_send (client->socket,
                       LNET_MESSAGE_SC_RESPONSE,
                       0, /* variant */
                       3,
                       &request_type, sizeof (request_type),
-                      &success, sizeof (success),
+                      &success, sizeof (success)
+                      &name_len, sizeof (name_len),
+                      name, strlen (name),
                       deny_reason, strlen (deny_reason));
 }
 

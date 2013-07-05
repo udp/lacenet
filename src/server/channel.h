@@ -41,8 +41,12 @@ struct _lnserver_channel
 
    lnserver_client master;
 
+   UT_hash_handle hh;
+
    char name [1];
 };
+
+lnserver_channel lnserver_channel_new (lnserver, const char * name);
 
 void lnserver_channel_delete (lnserver_channel);
 

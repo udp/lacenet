@@ -30,6 +30,7 @@
 #include "../server.h"
 
 int lnserver_proc_request_channel_list (lnserver ctx,
+                                        lnserver_client client,
                                         lnet_buffer buffer)
 {
 

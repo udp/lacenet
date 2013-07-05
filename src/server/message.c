@@ -42,19 +42,19 @@ int lnserver_proc_request (lnserver ctx,
    switch (type)
    {
       case LNET_REQUEST_CONNECT:
-         return lnserver_proc_request_connect (ctx, buffer);
+         return lnserver_proc_request_connect (ctx, client, buffer);
 
       case LNET_REQUEST_SET_NAME:
-         return lnserver_proc_request_set_name (ctx, buffer);
+         return lnserver_proc_request_set_name (ctx, client, buffer);
 
       case LNET_REQUEST_JOIN_CHANNEL:
-         return lnserver_proc_request_join_channel (ctx, buffer);
+         return lnserver_proc_request_join_channel (ctx, client, buffer);
 
       case LNET_REQUEST_LEAVE_CHANNEL:
-         return lnserver_proc_request_leave_channel (ctx, buffer);
+         return lnserver_proc_request_leave_channel (ctx, client, buffer);
 
       case LNET_REQUEST_CHANNEL_LIST:
-         return lnserver_proc_request_channel_list (ctx, buffer);
+         return lnserver_proc_request_channel_list (ctx, client, buffer);
    };
 
    return LNET_E_OK;
