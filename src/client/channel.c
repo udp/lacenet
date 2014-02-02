@@ -82,3 +82,15 @@ const char * lnclient_channel_name (lnclient_channel channel)
 }
 
 
+lnclient_channel lnclient_channel_first (lnclient ctx)
+{
+   return list_elem_front (ctx->channels);
+}
+
+lnclient_channel lnclient_channel_next (lnclient_channel channel)
+{
+   return list_elem_next (channel);
+}
+
+
+
