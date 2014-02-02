@@ -1,3 +1,13 @@
+*.xcworkspace
+xcuserdata
+
+deps/lacewing/
+
+.DS_Store
+
+*.pbxuser
+!default.pbxuser
+
 *.o
 *.a
 
