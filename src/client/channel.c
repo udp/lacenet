@@ -92,5 +92,11 @@ lnclient_channel lnclient_channel_next (lnclient_channel channel)
    return list_elem_next (channel);
 }
 
+long lnclient_num_channels (lnclient ctx)
+{
+   return list_length (ctx->channels);
+}
+
+
 
 

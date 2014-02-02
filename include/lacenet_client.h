@@ -46,6 +46,8 @@ typedef struct _lnclient_channel * lnclient_channel;
    void lnclient_channel_set_tag (lnclient_channel, void *);
    void * lnclient_channel_tag (lnclient_channel);
 
+   long lnclient_num_channels (lnclient);
+
    lnclient_channel lnclient_channel_first (lnclient);
    lnclient_channel lnclient_channel_next (lnclient_channel);
 
