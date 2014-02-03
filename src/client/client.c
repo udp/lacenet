@@ -264,6 +264,11 @@ void lnclient_join (lnclient ctx, const char * name,
    lnclient_send_request_join_channel (ctx, name, join_flags);
 }
 
+void lnclient_request_channel_list (lnclient ctx)
+{
+   lnclient_send_request_channel_list (ctx);
+}
+
 static size_t client_sink_data (lw_stream stream,
                                 const char * buf,
                                 size_t length)

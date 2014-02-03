@@ -144,4 +144,11 @@ lw_bool lnclient_channel_is_master (lnclient_channel channel)
    return lw_false;
 }
 
+void lnclient_channel_leave (lnclient_channel channel)
+{
+   lnclient ctx = channel->ctx;
+
+   lnclient_send_request_leave_channel (ctx, channel->id);
+}
+
 
