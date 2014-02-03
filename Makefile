@@ -7,6 +7,7 @@ OBJECTS = \
 deps/list.o \
 src/buffer.o \
 src/message.o \
+src/error.o \
 src/client/client.o \
 src/client/channel.o \
 src/client/message.o \

@@ -33,17 +33,19 @@ const char * lnet_error_string (int status_code)
 {
     switch (status_code)
     {
-       LNET_E_OK:
+       case LNET_E_OK:
           return "No error";
 
-       LNET_E_PROTOCOL:
+       case LNET_E_PROTOCOL:
           return "Protocol error";
 
-       LNET_E_MEM: 
+       case LNET_E_MEM: 
           return "Memory allocation error";
 
-       LNET_E_PARAM:
+       case LNET_E_PARAM:
           return "Invalid parameter specified";
     };
+
+    return "";
 }
 
