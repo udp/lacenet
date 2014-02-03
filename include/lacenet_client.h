@@ -191,9 +191,6 @@ void lnclient_join (lnclient,
 
 void lnclient_request_channel_list (lnclient);
 
-lnclient_channel lnclient_first_channel (lnclient);
-lnclient_channel lnclient_channel_next (lnclient_channel);
-
 #ifdef __cplusplus
 }
 #endif
