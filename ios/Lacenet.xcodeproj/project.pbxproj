@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8B12C20A189FD44B009FACD0 /* error.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B12C209189FD44B009FACD0 /* error.c */; };
 		8B5A0EF4189ED489002C2CFC /* buffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B5A0ED3189ED489002C2CFC /* buffer.c */; };
 		8B5A0EF5189ED489002C2CFC /* channel.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B5A0ED6189ED489002C2CFC /* channel.c */; };
 		8B5A0EF6189ED489002C2CFC /* client.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B5A0ED8189ED489002C2CFC /* client.c */; };
@@ -85,6 +86,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		8B12C209189FD44B009FACD0 /* error.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = error.c; path = ../src/error.c; sourceTree = "<group>"; };
 		8B5A0EA9189ED43E002C2CFC /* liblacenet.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblacenet.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B5A0ED3189ED489002C2CFC /* buffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = buffer.c; path = ../src/buffer.c; sourceTree = "<group>"; };
 		8B5A0ED4189ED489002C2CFC /* buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = buffer.h; path = ../src/buffer.h; sourceTree = "<group>"; };
@@ -222,6 +224,7 @@
 				8B5A0ED4189ED489002C2CFC /* buffer.h */,
 				8B5A0ED5189ED489002C2CFC /* client */,
 				8B5A0EE3189ED489002C2CFC /* common.h */,
+				8B12C209189FD44B009FACD0 /* error.c */,
 				8B5A0EE4189ED489002C2CFC /* message.c */,
 				8B5A0EE5189ED489002C2CFC /* message.h */,
 				8B5A0EE6189ED489002C2CFC /* server */,
@@ -432,6 +435,7 @@
 			files = (
 				8B5A0F6E189ED4A8002C2CFC /* sync.c in Sources */,
 				8B5A0F4C189ED4A8002C2CFC /* eventpump.cc in Sources */,
+				8B12C20A189FD44B009FACD0 /* error.c in Sources */,
 				8B5A0F00189ED489002C2CFC /* client.c in Sources */,
 				8B5A0F4B189ED4A8002C2CFC /* event.cc in Sources */,
 				8B5A0F57189ED4A8002C2CFC /* timer.cc in Sources */,
