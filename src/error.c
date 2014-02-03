@@ -1,7 +1,7 @@
 
 /* vim: set et ts=3 sw=3 ft=c sts=3:
  *
- * Copyright (C) 2013 James McLaughlin et al.  All rights reserved.
+ * Copyright (C) 2014 James McLaughlin et al.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,28 +27,23 @@
  * SUCH DAMAGE.
  */
 
-#ifndef LNCLIENT_CHANNEL
-#define LNCLIENT_CHANNEL
+#include "common.h"
 
-struct _lnclient_channel
+const char * lnet_error_string (int status_code)
 {
-   void * tag;
+    switch (status_code)
+    {
+       LNET_E_OK:
+          return "No error";
 
-   lnclient ctx;
+       LNET_E_PROTOCOL:
+          return "Protocol error";
 
-   long id;
-   lw_i8 flags;
-   char * name;
+       LNET_E_MEM: 
+          return "Memory allocation error";
 
-   list (struct _lnclient_peer, peers);
-
-   struct _lnclient_peer * master;
-};
-
-lnclient_channel lnclient_read_channel (lnclient ctx, lnet_buffer buffer);
-
-void lnclient_channel_delete (lnclient_channel);
-
-#endif
-
+       LNET_E_PARAM:
+          return "Invalid parameter specified";
+    };
+}
 

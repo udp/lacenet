@@ -59,3 +59,58 @@ lnclient_peer lnclient_peer_next (lnclient_peer peer)
    return list_elem_next (peer);
 }
 
+void lnclient_peer_send (lnclient_peer peer,
+                         long _subchannel,
+                         const char * buffer,
+                         size_t size,
+                         long variant)
+{
+   lnclient_channel channel = peer->channel;
+   lnclient ctx = channel->ctx;
+
+   lw_i16 channel_id = lnet_htons (channel->id);
+   lw_i16 peer_id = lnet_htons (peer->id);
+   lw_i8 subchannel = (lw_i8) _subchannel;
+
+   lnet_message_send (ctx->socket,
+                      LNET_MESSAGE_CS_CHANNEL_MESSAGE,
+                      variant, 
+                      4,
+                      &subchannel, sizeof (subchannel),
+                      &channel_id, sizeof (channel_id),
+                      &peer_id, sizeof (peer_id),
+                      buffer, size);
+}
+
+
+void lnclient_peer_blast (lnclient_peer peer,
+                          long _subchannel,
+                          const char * buffer,
+                          size_t size,
+                          long variant)
+{
+   lnclient_channel channel = peer->channel;
+   lnclient ctx = channel->ctx;
+
+   lw_i16 channel_id = lnet_htons (channel->id);
+   lw_i16 peer_id = lnet_htons (peer->id);
+   lw_i8 subchannel = (lw_i8) _subchannel;
+
+   lnet_message_blast (ctx->udp,
+                       ctx->udp_addr,
+                       ctx->id,
+                       LNET_MESSAGE_CS_CHANNEL_MESSAGE,
+                       variant, 
+                       4,
+                       &subchannel, sizeof (subchannel),
+                       &channel_id, sizeof (channel_id),
+                       &peer_id, sizeof (peer_id),
+                       buffer, size);
+}
+
+lw_bool lnclient_peer_is_master (lnclient_peer peer)
+{
+   return peer->channel->master == peer;
+}
+
+

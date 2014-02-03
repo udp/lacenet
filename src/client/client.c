@@ -220,6 +220,16 @@ void lnclient_connect (lnclient ctx, const char * host, long port)
    lw_client_connect (ctx->socket, host, port);
 }
 
+lw_bool lnclient_connected (lnclient ctx)
+{
+   return ctx->flags & LNCLIENT_FLAG_GOT_WELCOME;
+}
+
+void lnclient_disconnect (lnclient ctx)
+{
+   lw_stream_close (ctx->socket, lw_false);
+}
+
 lw_addr lnclient_server_addr (lnclient ctx)
 {
    return lw_client_server_addr (ctx->socket);
@@ -233,6 +243,11 @@ void lnclient_set_name (lnclient ctx, const char * name)
 const char * lnclient_name (lnclient ctx)
 {
    return ctx->name;
+}
+
+long lnclient_id (lnclient ctx)
+{
+   return ctx->id;
 }
 
 void lnclient_join (lnclient ctx, const char * name,

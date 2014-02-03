@@ -88,6 +88,7 @@ int lnclient_proc_response_join_channel (lnclient ctx,
 
    lnclient_channel channel = list_elem_back (ctx->channels);
 
+   channel->ctx = ctx;
    channel->flags = flags;
    channel->id = lnet_buffer_int16 (buffer);
    channel->name = channel_name;
