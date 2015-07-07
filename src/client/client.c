@@ -39,11 +39,24 @@
  * everything, and we can tell it to retry when more data arrives)
  */
 
-const static lw_streamdef client_streamdef;
+static size_t client_sink_data(lw_stream stream, const char * buf, size_t length);
+
+const static lw_streamdef client_streamdef =
+{
+   client_sink_data,
+   0, /* sink_stream */
+   0, /* retry */
+   0, /* is_transparent */
+   0, /* close */
+   0, /* bytes_left */
+   0, /* read */
+   0, /* cleanup */
+   sizeof(struct _lnclient) /* tail size */
+};
 
 static void on_socket_error (lw_client socket, lw_error error)
 {
-   lnclient ctx = lw_stream_tag (socket);
+   lnclient ctx = (lnclient) lw_stream_tag (socket);
 
    if (ctx->config.on_error)
       ctx->config.on_error (ctx, error);
@@ -51,7 +64,7 @@ static void on_socket_error (lw_client socket, lw_error error)
 
 static void on_socket_connect (lw_client socket)
 {
-   lnclient ctx = lw_stream_tag (socket);
+   lnclient ctx = (lnclient) lw_stream_tag (socket);
 
    lw_stream_write (socket, "\0", 1);
 
@@ -68,14 +81,14 @@ static void on_socket_connect (lw_client socket)
 
 static void on_socket_disconnect (lw_client socket)
 {
-   lnclient ctx = lw_stream_tag (socket);
+   lnclient ctx = (lnclient) lw_stream_tag (socket);
 
    ctx->flags &= ~ LNCLIENT_FLAG_GOT_WELCOME;
 }
 
 static void on_udp_error (lw_udp udp, lw_error error)
 { 
-   lnclient ctx = lw_udp_tag (udp);
+   lnclient ctx = (lnclient) lw_udp_tag (udp);
 
    if (ctx->config.on_error)
       ctx->config.on_error (ctx, error);
@@ -89,7 +102,7 @@ static void on_udp_data (lw_udp udp,
    if (length < 1)
       return;
 
-   lnclient ctx = lw_udp_tag (udp);
+   lnclient ctx = (lnclient) lw_udp_tag (udp);
 
    lw_ui8 type = *buffer;
    type >>= 4;
@@ -140,7 +153,7 @@ static void on_udp_data (lw_udp udp,
 
 static void on_timer_tick (lw_timer timer)
 {
-   lnclient ctx = lw_timer_tag (timer);
+   lnclient ctx = (lnclient) lw_timer_tag (timer);
 
    lnet_message_blast (ctx->udp,
                        ctx->udp_addr,
@@ -157,7 +170,7 @@ lnclient lnclient_new (lw_pump pump, struct _lnclient_config config)
    if (!stream)
       return 0;
 
-   lnclient ctx = lw_stream_tail (stream);
+   lnclient ctx = (lnclient) lw_stream_tail (stream);
 
    memcpy (&ctx->config, &config, sizeof (config));
 
@@ -276,7 +289,7 @@ static size_t client_sink_data (lw_stream stream,
    int res, status;
    struct _lnet_buffer buffer;
 
-   lnclient ctx = lw_stream_tail (stream);
+   lnclient ctx = (lnclient) lw_stream_tail (stream);
 
    buffer.ptr = buf;
    buffer.length = length;
@@ -357,17 +370,4 @@ error:
 
    return (length - buffer.length);
 }
-
-const static lw_streamdef client_streamdef =
-{
-   client_sink_data,
-   0, /* sink_stream */
-   0, /* retry */
-   0, /* is_transparent */
-   0, /* close */
-   0, /* bytes_left */
-   0, /* read */
-   0, /* cleanup */
-   sizeof (struct _lnclient) /* tail size */
-};
 

@@ -50,7 +50,7 @@ enum lnet_error_t
 
 const char * lnet_error_string (int status_code);
 
-#ifdef __cplusplus
+#if defined(__cplusplus) && !defined(_MSC_VER)
 }
 #endif
 

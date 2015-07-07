@@ -33,6 +33,17 @@
 #include <lacenet.h>
 
 #include <stdlib.h>
+
+#if defined(_MSC_VER)
+#include <type_traits>
+// This is needed for list.h
+#define typeof(e) std::remove_reference<decltype(e)>::type
+
+#include <string.h>
+// This is needed for server/request/join_channel.c
+#define strcasecmp _stricmp
+#endif
+
 #include "../deps/list.h"
 
 #define LNET_VERSION "revision 3"

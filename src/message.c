@@ -30,7 +30,12 @@
 #include "common.h"
 #include "message.h"
 
+#ifndef _MSC_VER
 #include <alloca.h>
+#else
+#include <malloc.h>
+#define alloca _alloca
+#endif
 #include <string.h>
 
 int lnet_message_read (lnet_message message,
@@ -228,7 +233,7 @@ void lnet_message_blast (lw_udp udp, lw_addr addr,
     */
 
    char * p, * buffer;
-   p = buffer = alloca (size + 3);
+   p = buffer = (char *) alloca (size + 3);
 
    *p ++ = type;
 

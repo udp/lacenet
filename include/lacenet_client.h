@@ -191,7 +191,7 @@ void lnclient_join (lnclient,
 
 void lnclient_request_channel_list (lnclient);
 
-#ifdef __cplusplus
+#if defined(__cplusplus) && !defined(_MSC_VER)
 }
 #endif
 
