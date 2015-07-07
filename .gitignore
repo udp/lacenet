@@ -2,6 +2,7 @@
 xcuserdata
 
 deps/lacewing/
+build/
 
 .DS_Store
 

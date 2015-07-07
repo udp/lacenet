@@ -34,7 +34,7 @@
 
 static void on_socket_error (lw_server server, lw_error error)
 {
-   lnserver ctx = lw_server_tag (server);
+   lnserver ctx = (lnserver) lw_server_tag (server);
 
    if (ctx->config.on_error)
       ctx->config.on_error (ctx, error);
@@ -42,7 +42,7 @@ static void on_socket_error (lw_server server, lw_error error)
 
 static void on_socket_connect (lw_server server, lw_server_client client)
 {
-   lnserver ctx = lw_server_tag (server);
+   lnserver ctx = (lnserver) lw_server_tag (server);
 
    lnserver_client client_ctx = lnserver_client_new (ctx, client);
 
@@ -59,9 +59,9 @@ static void on_socket_connect (lw_server server, lw_server_client client)
 
 static void on_socket_disconnect (lw_server server, lw_server_client socket)
 {
-   lnserver ctx = lw_stream_tag (socket);
+   lnserver ctx = (lnserver) lw_stream_tag (socket);
 
-   lnserver_client client = lw_stream_tag (socket);
+   lnserver_client client = (lnserver_client) lw_stream_tag (socket);
 
    if (!client)
       return;  /* client had no context */
@@ -79,7 +79,7 @@ static void on_socket_disconnect (lw_server server, lw_server_client socket)
 
 static void on_udp_error (lw_udp udp, lw_error error)
 { 
-   lnserver ctx = lw_udp_tag (udp);
+   lnserver ctx = (lnserver) lw_udp_tag (udp);
 
    if (ctx->config.on_error)
       ctx->config.on_error (ctx, error);
@@ -93,7 +93,7 @@ static void on_udp_data (lw_udp udp,
    if (length < 1)
       return;
 
-   lnserver ctx = lw_udp_tag (udp);
+   lnserver ctx = (lnserver) lw_udp_tag (udp);
 
    lw_ui8 type = *buffer;
    type >>= 4;

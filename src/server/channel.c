@@ -31,7 +31,7 @@
 
 lnserver_channel lnserver_channel_new (lnserver ctx, const char * name)
 {
-   lnserver_channel channel = calloc
+   lnserver_channel channel = (lnserver_channel) calloc
       (sizeof (struct _lnserver_channel) + strlen (name) + 1, 1);
 
    if (!channel)

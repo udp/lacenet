@@ -128,7 +128,7 @@ void lnserver_delete (lnserver);
 void lnserver_host (lnserver, long port);
 void lnserver_host_filter (lnserver, lw_filter);
 
-#ifdef __cplusplus
+#if defined(__cplusplus) && !defined(_MSC_VER)
 }
 #endif
 

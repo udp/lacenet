@@ -37,7 +37,20 @@
  * everything, and we can tell it to retry when more data arrives)
  */
 
-const static lw_streamdef server_client_streamdef;
+static size_t client_sink_data(lw_stream stream, const char * buf, size_t length);
+
+const static lw_streamdef server_client_streamdef =
+{
+   client_sink_data,
+   0, /* sink_stream */
+   0, /* retry */
+   0, /* is_transparent */
+   0, /* close */
+   0, /* bytes_left */
+   0, /* read */
+   0, /* cleanup */
+   sizeof(struct _lnserver_client) /* tail size */
+};
 
 lnserver_client lnserver_client_new (lnserver ctx, lw_server_client socket)
 {
@@ -46,7 +59,7 @@ lnserver_client lnserver_client_new (lnserver ctx, lw_server_client socket)
    if (!stream)
       return 0;
 
-   lnserver_client client = lw_stream_tail (stream);
+   lnserver_client client = (lnserver_client) lw_stream_tail (stream);
 
    client->server = ctx;
 
@@ -73,7 +86,7 @@ static size_t client_sink_data (lw_stream stream,
    int res, status;
    struct _lnet_buffer buffer;
 
-   lnserver_client client = lw_stream_tail (stream);
+   lnserver_client client = (lnserver_client) lw_stream_tail (stream);
    lnserver ctx = client->server;
 
    buffer.ptr = buf;
@@ -155,19 +168,6 @@ error:
 
    return (length - buffer.length);
 }
-
-const static lw_streamdef server_client_streamdef =
-{
-   client_sink_data,
-   0, /* sink_stream */
-   0, /* retry */
-   0, /* is_transparent */
-   0, /* close */
-   0, /* bytes_left */
-   0, /* read */
-   0, /* cleanup */
-   sizeof (struct _lnserver_client) /* tail size */
-};
 
 lw_stream lnserver_client_stream (lnserver_client ctx)
 {
